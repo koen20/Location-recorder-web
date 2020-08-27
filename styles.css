@@ -1,0 +1,42 @@
+#mapid {
+    height: 91%;
+    z-index: 0;
+    position: relative;
+    width: 80%;
+    float: left;
+    display: inline-block;
+}
+
+.mdc-top-app-bar {
+    z-index: 10;
+    position: relative;
+}
+
+html, body {
+    height: 100vh;
+    overflow: hidden;
+    width: 100%;
+}
+
+#timeline {
+    width: 20%;
+
+    position: absolute;
+    overflow: hidden;
+    display: inline-block;
+    margin-left: 3.5px;
+}
+
+@media only screen and (max-width: 800px) {
+    #mapid {
+        height: 60%;
+        width: 100%;
+        display: block;
+    }
+
+    #timeline {
+        display: inline;
+        position: static;
+        width: 100%;
+    }
+}
