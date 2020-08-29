@@ -20,9 +20,9 @@ html, body {
 
 #timeline {
     width: 20%;
-
+    height: 95%;
     position: absolute;
-    overflow: hidden;
+    overflow-y: auto;
     display: inline-block;
     margin-left: 3.5px;
 }
@@ -39,4 +39,13 @@ html, body {
         position: static;
         width: 100%;
     }
+}
+
+.route-icon {
+    height: 22px;
+    margin-right: 5px;
+}
+
+.stop {
+    background-color: #d7d7d7;
 }

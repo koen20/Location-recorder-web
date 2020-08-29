@@ -30,21 +30,42 @@ function setMap(startTime, endTime) {
     });
 }
 
-function setTimeline(date){
+function setTimeline(date) {
+    var timeline = $("#timeline");
+    timeline.text("Laden...")
     $.get(host + "timeline?date=" + date, function (data, status) {
-        console.log(data)
-        var jsonArray = JSON.parse(data);
-        $("#timeline").text("");
-        markers = L.layerGroup()
+        console.log(data);
+        var res = JSON.parse(data);
+        var jsonArray = res.stops;
+        var jsonArrayRoutes = res.routes;
+        timeline.text("");
+        markers = L.layerGroup();
         for (i = 0; i < jsonArray.length; i++) {
             var item = jsonArray[i];
-            $("#timeline").prepend("<p>" + item.start.slice(5, -2) + " - " + item.end.slice(5, -2) + "<br>" + item.location + "</p>");
+            timeline.prepend("<p class='stop'>" + timestampToString(item.start) + " - " + timestampToString(item.end) + "<br>" + item.location + "</p>");
             var marker = L.marker([item.lat, item.lon]);
-            marker.bindPopup(item.location + "<br>Start: " + item.start.slice(5, -2) + "<br>Einde: " + item.end.slice(5, -2))
+            marker.bindPopup(item.location + "<br>Start: " + timestampToString(item.start) + "<br>Einde: " + timestampToString(item.end));
             markers.addLayer(marker);
+            for (k = 0; k < jsonArrayRoutes.length; k++){
+                var itemR = jsonArrayRoutes[k];
+                if (itemR.start === item.end) {
+                    var icon = ""
+                    if (itemR.movementType === "walking") {
+                        icon = "images/walking.svg"
+                    } else if (itemR.movementType === "driving") {
+                        icon = "images/car.svg"
+                    }
+                    timeline.prepend("<p class='route'><img class='route-icon' src=\"" + icon + "\">" + (itemR.distance / 1000).toFixed(1) + " km(" + itemR.speed.toFixed(1) + "km/h)</p>");
+                }
+            }
         }
-        map.addLayer(markers)
+        map.addLayer(markers);
     });
+}
+
+function timestampToString(timestamp) {
+    var date = new Date(timestamp);
+    return date.getDate() + "-" + (date.getMonth() + 1) + " " + date.getHours() + ":" + date.getMinutes();
 }
 
 function clearMap() {
