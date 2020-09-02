@@ -1,44 +1,72 @@
-#mapid {
-    height: 91%;
-    z-index: 0;
-    position: relative;
-    width: 80%;
-    float: left;
-    display: inline-block;
+:root {
+    --main-primary: #7c0c7c;
+    --main-primaryDark: #600a60;
+    --main-accent: #eeb300;
+
+    --main-text-on-primary: #fff;
 }
 
-.mdc-top-app-bar {
-    z-index: 10;
-    position: relative;
-}
-
-html, body {
+body {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
     height: 100vh;
-    overflow: hidden;
-    width: 100%;
+    width: 100vw;
+    margin: 0;
+    display: grid;
+    grid-template-rows: auto 1fr;
 }
 
-#timeline {
-    width: 20%;
-    height: 95%;
-    position: absolute;
-    overflow-y: auto;
-    display: inline-block;
-    margin-left: 3.5px;
+header {
+    background: var(--main-primary);
+    color: var(--main-text-on-primary);
+    z-index: 100;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    padding: 0 25px;
+}
+
+
+@media only screen and (max-width: 600px) {
+    header {
+        padding: 0;
+        text-align: center;
+        grid-template-columns: unset;
+        grid-template-rows: auto auto;
+    }
+
+    .date-selector {
+        padding: 0 20px 20px;
+    }
+}
+
+.date-selector {
+    text-align: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.date-selector * {
+    padding-right: 10px;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
 }
 
 @media only screen and (max-width: 800px) {
-    #mapid {
-        height: 60%;
-        width: 100%;
-        display: block;
+    main {
+        grid-template-columns: unset;
+        grid-template-rows: 1fr 1fr;
     }
+}
 
-    #timeline {
-        display: inline;
-        position: static;
-        width: 100%;
-    }
+#timeline {
+    height: 100%;
+    z-index: 100;
+    overflow: auto;
+    min-height: 0;
+    min-width: 0;
 }
 
 .route-icon {
