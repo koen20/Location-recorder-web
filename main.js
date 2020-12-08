@@ -1,8 +1,9 @@
 var locations = [];
 var map;
 var markers;
-//var host = "http://127.0.0.1:9936/"
-var host = "https://koenhabets.nl/api/owntracks/"
+var timelineJson;
+var host = "http://127.0.0.1:9936/"
+//var host = "https://koenhabets.nl/api/owntracks/"
 
 function initMap() {
     map = L.map('mapid').setView([51.505, -0.09], 13);
@@ -35,14 +36,20 @@ function setTimeline(date) {
     timeline.text("Laden...")
     $.get(host + "timeline?date=" + date, function (data, status) {
         console.log(data);
-        var res = JSON.parse(data);
-        var jsonArray = res.stops;
-        var jsonArrayRoutes = res.routes;
+        timelineJson = JSON.parse(data);
+        var jsonArray = timelineJson.stops;
+        var jsonArrayRoutes = timelineJson.routes;
         timeline.text("");
         markers = L.layerGroup();
         for (i = 0; i < jsonArray.length; i++) {
             var item = jsonArray[i];
-            timeline.prepend("<p class='stop'>" + timestampToString(item.start) + " - " + timestampToString(item.end) + "<br>" + item.location + "</p>");
+            var buttonText = ""
+            if (!item.locationUserAdded){
+                buttonText = "<button class='button-add-stop' id='" + item.start + item.end + "'>Opslaan</button>"
+            }
+            timeline.prepend("<p class='stop'>" + timestampToString(item.start) + " - " + timestampToString(item.end) + "<br>" + item.location + buttonText + "</p>");
+
+            timeline.prepend()
             var marker = L.marker([item.lat, item.lon]);
             marker.bindPopup(item.location + "<br>Start: " + timestampToString(item.start) + "<br>Einde: " + timestampToString(item.end));
             markers.addLayer(marker);
@@ -60,6 +67,21 @@ function setTimeline(date) {
             }
         }
         map.addLayer(markers);
+        $(".button-add-stop").click(function() {
+            console.log("button clicked")
+            var id = $(this).attr('id');
+            var jsonArray = timelineJson.stops;
+            for (i = 0; i < jsonArray.length; i++) {
+                var item = jsonArray[i];
+                if(item.start + (item.end + "") === id){
+                    var newName = prompt("Please enter the name of the stop", item.name)
+                    $.post(host + "stop/add?name=" + newName + "&lat=" + item.lat + "&lon=" + item.lon, function (data, status) {
+                        setDate();
+                    });
+                }
+            }
+
+        });
     });
 }
 
