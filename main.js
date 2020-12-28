@@ -75,7 +75,7 @@ function setTimeline(date) {
                 var item = jsonArray[i];
                 if(item.start + (item.end + "") === id){
                     var newName = prompt("Please enter the name of the stop", item.name)
-                    $.post(host + "stop/add?name=" + newName + "&lat=" + item.lat + "&lon=" + item.lon, function (data, status) {
+                    $.post(host + "stopImproved mysql, added timeline test?name=" + newName + "&lat=" + item.lat + "&lon=" + item.lon, function (data, status) {
                         setDate();
                     });
                 }
